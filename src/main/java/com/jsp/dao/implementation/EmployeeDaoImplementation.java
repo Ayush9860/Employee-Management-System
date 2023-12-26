@@ -8,7 +8,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import com.jsp.dao.EmployeeDao;
-import com.qsp.model.Employee;
+import com.jsp.model.Employee;
 
 public class EmployeeDaoImplementation implements EmployeeDao {
 	static Connection connection = null;

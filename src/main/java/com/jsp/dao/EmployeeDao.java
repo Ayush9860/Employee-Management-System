@@ -2,7 +2,7 @@ package com.jsp.dao;
 
 import java.util.List;
 
-import com.qsp.model.Employee;
+import com.jsp.model.Employee;
 
 public interface EmployeeDao {
 

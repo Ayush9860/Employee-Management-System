@@ -1,4 +1,4 @@
-package com.qsp.model;
+package com.jsp.model;
 
 import java.io.Serializable;
 import java.sql.Date;

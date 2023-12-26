@@ -1,4 +1,4 @@
-package com.qsp.model;
+package com.jsp.model;
 
 public enum Gender {
 

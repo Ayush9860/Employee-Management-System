@@ -1,4 +1,4 @@
-package com.qsp.main;
+package com.jsp.main;
 
 import java.sql.SQLException;
 import java.text.ParseException;
@@ -8,8 +8,8 @@ import java.util.Scanner;
 
 import com.jsp.dao.EmployeeDao;
 import com.jsp.dao.implementation.EmployeeDaoImplementation;
-import com.qsp.model.Employee;
-import com.qsp.model.Gender;
+import com.jsp.model.Employee;
+import com.jsp.model.Gender;
 
 public class MainClass {
 
@@ -137,6 +137,7 @@ public class MainClass {
 				System.out.println("Enter the ID :");
 				id = sc.nextInt();
 				dao.getEmployeeById(id);
+				break;
 
 			case 12:
 				dao.getAllEmplyee();
