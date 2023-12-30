@@ -113,4 +113,13 @@ public class Employee implements Serializable {
 	public void setDateOfJoining(Date dateOfJoining) {
 		this.dateOfJoining = dateOfJoining;
 	}
+
+	@Override
+	public String toString() {
+		return " id : " + id + "\n name : " + name + "\n email : " + email + "\n phone : " + phone + "\n gender : "
+				+ gender + "\n deptNo : " + deptNo + "\n age : " + age + "\n salary : " + salary + "\n dateOfBirth : "
+				+ dateOfBirth + "\n designation : " + designation + "\n address : " + address + "\n dateOfJoining : "
+				+ dateOfJoining + "\n------------------------------------------------\n";
+	}
+
 }

@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Scanner;
 
 import com.jsp.dao.EmployeeDao;
@@ -15,12 +16,12 @@ public class MainClass {
 
 	private static Scanner sc = new Scanner(System.in);
 
-	public static void main(String[] args) throws SQLException {
+	public static void main(String[] args) {
 
 		while (true) {
 			EmployeeDao dao = new EmployeeDaoImplementation();
 
-			System.out.println("\nWELCOME TO EMPLOYEE DATABASE");
+			System.out.println("\n*****WELCOME TO EMPLOYEE DATABASE*****\n");
 			System.out.println("1.  Add Employee");
 			System.out.println("2.  Update Employee Name By ID");
 			System.out.println("3.  Update Employee Designation By ID");
@@ -45,7 +46,10 @@ public class MainClass {
 			case 1:
 				Employee employee = createEmployee();
 				boolean result = dao.saveEmployee(employee);
-				System.out.println("\nData Inserted Successfully...");
+				if (result == true)
+					System.out.println("\nData Inserted Successfully...");
+				else
+					System.out.println("\nData not Inserted...");
 				break;
 
 			case 2:
@@ -54,8 +58,11 @@ public class MainClass {
 				System.out.println("Enter the New Name : ");
 				sc.nextLine();
 				String name = sc.nextLine();
-				dao.updateEmployeeNameById(id, name);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeNameById(id, name);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid ID...");
 				break;
 
 			case 3:
@@ -64,8 +71,11 @@ public class MainClass {
 				System.out.println("Enter the new Designation :");
 				sc.nextLine();
 				String designation = sc.nextLine();
-				dao.updateEmployeeDesignationById(id, designation);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeDesignationById(id, designation);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid ID...");
 				break;
 
 			case 4:
@@ -73,8 +83,11 @@ public class MainClass {
 				id = sc.nextInt();
 				System.out.println("Enter the New Department Number :");
 				int newDeptNo = sc.nextInt();
-				dao.updateEmployeeDepartmentNoById(id, newDeptNo);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeDepartmentNoById(id, newDeptNo);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid ID...");
 				break;
 
 			case 5:
@@ -82,8 +95,11 @@ public class MainClass {
 				id = sc.nextInt();
 				System.out.println("Enter the New Salary :");
 				double salary = sc.nextDouble();
-				dao.updateEmployeeSalaryById(id, salary);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeSalaryById(id, salary);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid ID...");
 				break;
 
 			case 6:
@@ -92,8 +108,11 @@ public class MainClass {
 				System.out.println("Enter the New Name :");
 				sc.nextLine();
 				name = sc.nextLine();
-				dao.updateEmployeeNameByPhoneNo(phone, name);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeNameByPhoneNo(phone, name);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid Phone Number...");
 				break;
 
 			case 7:
@@ -102,8 +121,11 @@ public class MainClass {
 				String email = sc.nextLine();
 				System.out.println("Enter the New Address :");
 				String address = sc.nextLine();
-				dao.updateEmployeeAddressByEmail(email, address);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeAddressByEmail(email, address);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid Email...");
 				break;
 
 			case 8:
@@ -112,8 +134,11 @@ public class MainClass {
 				email = sc.nextLine();
 				System.out.println("Enter the New Designation :");
 				designation = sc.nextLine();
-				dao.updateEmployeeDesignationByEmail(email, designation);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeDesignationByEmail(email, designation);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid Email...");
 				break;
 
 			case 9:
@@ -122,49 +147,68 @@ public class MainClass {
 				String dob = sc.nextLine();
 				System.out.println("Enter the New Designation :");
 				designation = sc.nextLine();
-				dao.updateEmployeeDesignationByDOB(dob, designation);
-				System.out.println("\nUpdated Successfully...");
+				result = dao.updateEmployeeDesignationByDOB(dob, designation);
+				if (result == true)
+					System.out.println("\nData Updated Successfully...");
+				else
+					System.out.println("\nEnter valid Date of Birth...");
 				break;
 
 			case 10:
 				System.out.println("Enter an ID to be Deleted :");
 				id = sc.nextInt();
-				dao.deleteEmployeeById(id);
-				System.out.println("Deleted Successfully...");
+				result = dao.deleteEmployeeById(id);
+				if (result == true)
+					System.out.println("\nDeleted Successfully...");
+				else
+					System.out.println("\nEnter valid ID to be deleted...");
 				break;
 
 			case 11:
-				System.out.println("Enter the ID :");
-				id = sc.nextInt();
-				dao.getEmployeeById(id);
+				System.out.println("Enter the ID to be fetched :");
+				Employee emp = dao.getEmployeeById(sc.nextInt());
+				if (emp != null)
+					System.out.println(emp);
+				else
+					System.out.println("\nEnter valid Employee ID...");
 				break;
 
 			case 12:
-				dao.getAllEmplyee();
+				List<Employee> employeeList = dao.getAllEmployee();
+				if (employeeList != null)
+					for (Employee employees : employeeList) {
+						System.out.println(employees);
+					}
+				else
+					System.out.println("\nData not present...");
 				break;
 
 			case 13:
-				System.out.println("1. Sort Name in Ascending");
-				System.out.println("2. Sort Name in Descending");
-				int click = sc.nextInt();
-
-				if (click == 1)
-					dao.sortEmployeeByNameAsc();
-				else if (click == 2)
-					dao.sortEmployeeByNameDesc();
+				List<Employee> employeeSortByName = dao.sortEmployeeByNameAsc();
+				if (employeeSortByName != null)
+					for (int i = 0; i < employeeSortByName.size(); i++) {
+						System.out.println(employeeSortByName.get(i));
+					}
 				else
-					System.out.println("Invalid Input...");
+					System.out.println("\nData not present...");
 				break;
 
 			case 14:
-				dao.sortEmployeeByDateOfJoining();
+				List<Employee> employeeSortByDOJ = dao.sortEmployeeByDateOfJoining();
+				if (employeeSortByDOJ != null)
+					for (int i = 0; i < employeeSortByDOJ.size(); i++) {
+						System.out.println(employeeSortByDOJ.get(i));
+					}
+				else
+					System.out.println("\nData not present...");
 				break;
 
 			case 15:
-				System.out.println("* * * * * E X I T * * * * *");
+				System.out.println("\n* * * * * E X I T * * * * *");
 				System.exit(0);
 
 			default:
+				System.out.println("\nEnter the correct input...");
 				break;
 			}
 		}

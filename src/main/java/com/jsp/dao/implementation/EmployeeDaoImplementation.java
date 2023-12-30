@@ -6,12 +6,19 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
+
+import com.jsp.customsorting.SortEmployeeByDateOfJoining;
+import com.jsp.customsorting.SortEmployeeByName;
 import com.jsp.dao.EmployeeDao;
 import com.jsp.model.Employee;
+import com.jsp.model.Gender;
 
 public class EmployeeDaoImplementation implements EmployeeDao {
-	static Connection connection = null;
+	static Connection connection;
 	static {
 		try {
 			Class.forName("org.postgresql.Driver");
@@ -20,7 +27,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 					"jdbc:postgresql://localhost:5432/employee_database_management?user=postgres&password=root");
 
 		} catch (ClassNotFoundException | SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -49,7 +55,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -58,7 +63,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeNameById(int id, String newName) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement("update emp set name = ? where id = ?");
@@ -72,7 +76,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -82,7 +85,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeDesignationById(int id, String designation) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection
@@ -97,7 +99,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -105,7 +106,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeDepartmentNoById(int id, int deptNo) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection
@@ -119,16 +119,13 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
 		return false;
 	}
 
 	@Override
 	public boolean updateEmployeeSalaryById(int id, double salary) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement("update emp set salary = ? where id = ?");
@@ -141,7 +138,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -149,7 +145,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeNameByPhoneNo(long phone, String name) {
-		// TODO Auto-generated method stub
 		try {
 			PreparedStatement preparedStatement = connection
 					.prepareStatement("update emp set name = ? where phone = ?");
@@ -162,7 +157,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -170,7 +164,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeAddressByEmail(String email, String address) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection
@@ -184,7 +177,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -192,7 +184,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeDesignationByEmail(String email, String designation) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection
@@ -206,7 +197,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -214,7 +204,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean updateEmployeeDesignationByDOB(String dob, String designation) {
-		// TODO Auto-generated method stub
 
 		try {
 			PreparedStatement preparedStatement = connection
@@ -228,7 +217,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return false;
@@ -236,7 +224,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public boolean deleteEmployeeById(int id) {
-		// TODO Auto-generated method stub
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement("delete from emp where id = ?");
 			preparedStatement.setInt(1, id);
@@ -247,7 +234,6 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 				return true;
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -256,171 +242,100 @@ public class EmployeeDaoImplementation implements EmployeeDao {
 
 	@Override
 	public Employee getEmployeeById(int id) {
-		// TODO Auto-generated method stub
 		try {
 			PreparedStatement preparedStatement = connection.prepareStatement("select * from emp where id = ?");
 			preparedStatement.setInt(1, id);
 
 			ResultSet result = preparedStatement.executeQuery();
 
-			while (result.next()) {
-				System.out.println("----------------------------------------------");
-				System.out.println("Employee ID : " + result.getInt(1));
-				System.out.println("Employee Name : " + result.getString(2));
-				System.out.println("Employee Email : " + result.getString(3));
-				System.out.println("Employee Phone : " + result.getLong(4));
-				System.out.println("Employee Gender : " + result.getString(5));
-				System.out.println("Employee Dept No. : " + result.getInt(6));
-				System.out.println("Employee Age : " + result.getInt(7));
-				System.out.println("Employee Salary : " + result.getDouble(8));
-				System.out.println("Employee Date of Birth : " + result.getString(9));
-				System.out.println("Employee Designation : " + result.getString(10));
-				System.out.println("Employee Address : " + result.getString(11));
-				System.out.println("Employee Date of Joining : " + result.getDate(12));
-				System.out.println("----------------------------------------------");
-			}
+			Employee employee = new Employee();
+
+			if (result != null)
+				while (result.next()) {
+
+					int idRetrieved = result.getInt(1);
+					employee.setId(id);
+					employee.setName(result.getString(2));
+					employee.setEmail(result.getString(3));
+					employee.setPhone(result.getLong(4));
+
+					String gen = result.getString(5);
+					employee.setGender(Gender.valueOf(gen));
+
+					employee.setDeptNo(result.getInt(6));
+					employee.setAge(result.getInt(7));
+					employee.setSalary(result.getDouble(8));
+					employee.setDateOfBirth(result.getString(9));
+					employee.setDesignation(result.getString(10));
+					employee.setAddress(result.getString(11));
+
+					employee.setDateOfJoining(result.getDate(12));
+
+					return employee;
+
+				}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		return null;
 	}
 
 	@Override
-	public List<Employee> getAllEmplyee() {
-		// TODO Auto-generated method stub
-		try {
-			Statement statement = connection.createStatement();
-			String query = "select * from emp";
-			statement.execute(query);
+	public List<Employee> getAllEmployee() {
+		List<Employee> employeeList = new ArrayList<>();
 
-			ResultSet result = statement.getResultSet();
+		try {
+			PreparedStatement preparedStatement = connection.prepareStatement("select * from emp");
+			ResultSet result = preparedStatement.executeQuery();
 
 			while (result.next()) {
-				System.out.println("----------------------------------------------");
-				System.out.println("Employee ID : " + result.getInt(1));
-				System.out.println("Employee Name : " + result.getString(2));
-				System.out.println("Employee Email : " + result.getString(3));
-				System.out.println("Employee Phone : " + result.getLong(4));
-				System.out.println("Employee Gender : " + result.getString(5));
-				System.out.println("Employee Dept No. : " + result.getInt(6));
-				System.out.println("Employee Age : " + result.getInt(7));
-				System.out.println("Employee Salary : " + result.getDouble(8));
-				System.out.println("Employee Date of Birth : " + result.getString(9));
-				System.out.println("Employee Designation : " + result.getString(10));
-				System.out.println("Employee Address : " + result.getString(11));
-				System.out.println("Employee Date of Joining : " + result.getDate(12));
-				System.out.println("----------------------------------------------");
+				Employee employee = new Employee();
+
+				employee.setId(result.getInt(1));
+				employee.setName(result.getString(2));
+				employee.setEmail(result.getString(3));
+				employee.setPhone(result.getLong(4));
+
+				String gen = result.getString(5);
+				employee.setGender(Gender.valueOf(gen));
+
+				employee.setDeptNo(result.getInt(6));
+				employee.setAge(result.getInt(7));
+				employee.setSalary(result.getDouble(8));
+				employee.setDateOfBirth(result.getString(9));
+				employee.setDesignation(result.getString(10));
+				employee.setAddress(result.getString(11));
+
+				employee.setDateOfJoining(result.getDate(12));
+
+				employeeList.add(employee);
 			}
 
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-
-		return null;
+		return employeeList;
 	}
 
 	@Override
-	public boolean sortEmployeeByNameAsc() {
-		// TODO Auto-generated method stub
-		try {
-			Statement statement = connection.createStatement();
-			String query = "select * from emp order by name asc";
-			statement.execute(query);
+	public List<Employee> sortEmployeeByNameAsc() {
 
-			ResultSet result = statement.getResultSet();
+		List<Employee> employees = getAllEmployee();
 
-			while (result.next()) {
-				System.out.println("Employee ID : " + result.getInt(1));
-				System.out.println("Employee Name : " + result.getString(2));
-				System.out.println("Employee Email : " + result.getString(3));
-				System.out.println("Employee Phone : " + result.getLong(4));
-				System.out.println("Employee Gender : " + result.getString(5));
-				System.out.println("Employee Dept No. : " + result.getInt(6));
-				System.out.println("Employee Age : " + result.getInt(7));
-				System.out.println("Employee Salary : " + result.getDouble(8));
-				System.out.println("Employee Date of Birth : " + result.getString(9));
-				System.out.println("Employee Designation : " + result.getString(10));
-				System.out.println("Employee Address : " + result.getString(11));
-				System.out.println("Employee Date of Joining : " + result.getDate(12));
-				System.out.println("----------------------------------------------");
-			}
+		Collections.sort(employees, new SortEmployeeByName());
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+		return employees;
 	}
 
 	@Override
-	public boolean sortEmployeeByNameDesc() {
-		// TODO Auto-generated method stub
-		try {
-			Statement statement = connection.createStatement();
-			String query = "select * from emp order by name desc";
-			statement.execute(query);
+	public List<Employee> sortEmployeeByDateOfJoining() {
 
-			ResultSet result = statement.getResultSet();
+		List<Employee> employees = getAllEmployee();
 
-			while (result.next()) {
-				System.out.println("----------------------------------------------");
-				System.out.println("Employee ID : " + result.getInt(1));
-				System.out.println("Employee Name : " + result.getString(2));
-				System.out.println("Employee Email : " + result.getString(3));
-				System.out.println("Employee Phone : " + result.getLong(4));
-				System.out.println("Employee Gender : " + result.getString(5));
-				System.out.println("Employee Dept No. : " + result.getInt(6));
-				System.out.println("Employee Age : " + result.getInt(7));
-				System.out.println("Employee Salary : " + result.getDouble(8));
-				System.out.println("Employee Date of Birth : " + result.getString(9));
-				System.out.println("Employee Designation : " + result.getString(10));
-				System.out.println("Employee Address : " + result.getString(11));
-				System.out.println("Employee Date of Joining : " + result.getDate(12));
-				System.out.println("----------------------------------------------");
-			}
+		Collections.sort(employees, new SortEmployeeByDateOfJoining());
 
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
-	}
-
-	@Override
-	public boolean sortEmployeeByDateOfJoining() {
-		// TODO Auto-generated method stub
-		try {
-			Statement statement = connection.createStatement();
-			String query = "select * from emp order by date_of_joining";
-			statement.execute(query);
-
-			ResultSet result = statement.getResultSet();
-
-			while (result.next()) {
-				System.out.println("----------------------------------------------");
-				System.out.println("Employee ID : " + result.getInt(1));
-				System.out.println("Employee Name : " + result.getString(2));
-				System.out.println("Employee Email : " + result.getString(3));
-				System.out.println("Employee Phone : " + result.getLong(4));
-				System.out.println("Employee Gender : " + result.getString(5));
-				System.out.println("Employee Dept No. : " + result.getInt(6));
-				System.out.println("Employee Age : " + result.getInt(7));
-				System.out.println("Employee Salary : " + result.getDouble(8));
-				System.out.println("Employee Date of Birth : " + result.getString(9));
-				System.out.println("Employee Designation : " + result.getString(10));
-				System.out.println("Employee Address : " + result.getString(11));
-				System.out.println("Employee Date of Joining : " + result.getDate(12));
-				System.out.println("----------------------------------------------");
-			}
-
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		return false;
+		return employees;
 	}
 
 }

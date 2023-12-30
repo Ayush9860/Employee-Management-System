@@ -28,12 +28,10 @@ public interface EmployeeDao {
 
 	Employee getEmployeeById(int id);
 
-	List<Employee> getAllEmplyee();
+	List<Employee> getAllEmployee();
 
-	public boolean sortEmployeeByNameAsc();
+	List<Employee> sortEmployeeByNameAsc();
 
-	public boolean sortEmployeeByNameDesc();
-
-	public boolean sortEmployeeByDateOfJoining();
+	List<Employee> sortEmployeeByDateOfJoining();
 
 }
